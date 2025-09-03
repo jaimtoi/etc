@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>2026년 대한민국 정부 부처별 예산안</title>
+    <style>
+        /* Google Fonts & Reset CSS */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@300;400;500;700&display=swap');
+        
+        :root {
+            --background-color: #F8F9FA;
+            --card-background: #FFFFFF;
+            --text-color: #212529;
+            --text-secondary-color: #495057;
+            --primary-color: #0d6efd;
+            --border-color: #e9ecef;
+            --border-radius: 12px;
+            --shadow: 0 6px 24px rgba(0, 0, 0, 0.07);
+            --transition-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.7;
+        }
+
+        /* Main Layout */
+        .main-container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            font-size: 1.1rem;
+            color: var(--text-secondary-color);
+        }
+
+        /* Tabs Navigation */
+        .tabs-container {
+            display: flex;
+            align-items: center;
+            width: 100%;
+            position: relative;
+            margin-bottom: 30px;
+        }
+
+        .tab-nav-btn {
+            background-color: var(--card-background);
+            border: 1px solid var(--border-color);
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            transition: all var(--transition-speed) ease;
+            z-index: 2;
+            flex-shrink: 0;
+        }
+        
+        .tab-nav-btn:hover {
+            background-color: #f1f3f5;
+            transform: scale(1.05);
+        }
+        
+        .tab-nav-btn svg {
+            width: 20px;
+            height: 20px;
+            stroke: var(--text-secondary-color);
+        }
+
+        #prev-btn { margin-right: 10px; }
+        #next-btn { margin-left: 10px; }
+
+        .tabs-wrapper {
+            overflow-x: hidden;
+            flex-grow: 1;
+            scroll-behavior: smooth;
+        }
+
+        .tabs-list {
+            list-style: none;
+            display: flex;
+            white-space: nowrap;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 5px;
+        }
+
+        .tab-item {
+            padding: 12px 24px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            color: var(--text-secondary-color);
+            position: relative;
+            transition: all var(--transition-speed) ease;
+            border-radius: var(--border-radius) var(--border-radius) 0 0;
+        }
+
+        .tab-item:hover { background-color: #f1f3f5; }
+
+        .tab-item.active {
+            color: var(--primary-color);
+            font-weight: 700;
+        }
+
+        .tab-item.active::after {
+            content: '';
+            position: absolute;
+            bottom: -7px;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background-color: var(--primary-color);
+            border-radius: 2px;
+        }
+        
+        /* Content Area */
+        .content-container { position: relative; }
+
+        .content-panel {
+            display: none;
+            background: var(--card-background);
+            padding: 40px;
+            border-radius: var(--border-radius);
+            box-shadow: var(--shadow);
+            border: 1px solid var(--border-color);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .content-panel.active { display: block; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .content-panel h2 {
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+        }
+        
+        .detail-grid {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 25px;
+        }
+
+        .detail-item {
+            padding: 20px;
+            border: 1px solid var(--border-color);
+            border-radius: var(--border-radius);
+            background-color: #fcfdff;
+        }
+
+        .detail-item h4 {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 12px;
+        }
+
+        .detail-item p, .detail-item ul {
+            font-size: 1rem;
+            color: var(--text-secondary-color);
+        }
+        
+        .detail-item ul {
+            list-style: none;
+            padding-left: 0;
+        }
+        
+        .detail-item li {
+            position: relative;
+            padding-left: 28px;
+            margin-bottom: 12px;
+        }
+        
+        .detail-item li::before {
+            content: '✓';
+            position: absolute;
+            left: 0;
+            top: 0;
+            background-color: #e7f5ff;
+            color: var(--primary-color);
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 12px;
+        }
+        
+        .detail-item li:last-child {
+            margin-bottom: 0;
+        }
+
+        .detail-item li strong {
+            font-weight: 700;
+            color: var(--text-color);
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Responsive Design */
+        @media (min-width: 992px) {
+            .detail-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 30px;
+            }
+            .detail-item.full-width {
+                grid-column: 1 / -1;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .main-container { width: 95%; margin: 20px auto; padding: 10px; }
+            header h1 { font-size: 1.8rem; }
+            header p { font-size: 1rem; }
+            .tab-item { padding: 10px 16px; font-size: 0.9rem; }
+            .content-panel { padding: 20px; }
+            .content-panel h2 { font-size: 1.5rem; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="main-container">
+        <header>
+            <h1>2026년 대한민국 정부 부처별 예산안</h1>
+        </header>
+
+        <div class="tabs-container">
+            <button id="prev-btn" class="tab-nav-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M15.75 19.5L8.25 12l7.5-7.5" /></svg>
+            </button>
+            <div class="tabs-wrapper" id="tabs-wrapper">
+                <ul class="tabs-list" id="tabs-list"></ul>
+            </div>
+            <button id="next-btn" class="tab-nav-btn">
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.25 4.5l7.5 7.5-7.5 7.5" /></svg>
+            </button>
+        </div>
+
+        <div class="content-container" id="content-container"></div>
+    </div>
+
+    <script>
+        const budgetData = [
+            // Data is structured as arrays for list items to improve rendering
+            {
+                id: 'moef', ministry: '기획재정부',
+                totalBudget: '739조 5천억 원 (총괄)',
+                usageField: '민생·경제 안정, 미래 성장 동력 확보, 지역균형발전, 재정 혁신',
+                usageBudget: ['복지·고용 분야: 269조 1천억 원'],
+                coreContent: ['정부 예산안 총괄 및 취약계층 지원 강화'],
+                coreDetail: ['<strong>정부 예산안 총괄:</strong> 복지 분야 예산을 전체의 36% 이상으로 편성.', '<strong>취약계층 지원 강화:</strong> 장애인 연금 확대, 최중증 발달장애인 통합돌봄 서비스 도입, 가족돌봄청년 맞춤형 지원 등 취약계층 지원에 중점.']
+            },
+            {
+                id: 'moe', ministry: '교육부',
+                totalBudget: '106조 2,663억 원',
+                usageField: '대학 육성, 유보통합, AI·이공계 인재 양성',
+                usageBudget: ['대학 육성: 3조 1,326억 원', '유보통합: 8,331억 원', 'AI·이공계 인재 양성: 3,336억 원'],
+                coreContent: ['거점국립대 집중 육성', '유보통합 본격 추진', 'AI 및 이공계 인재 양성'],
+                coreDetail: ['<strong>거점국립대 집중 육성:</strong> \'서울대 10개 만들기\' 프로젝트의 일환으로 9개 거점국립대에 8,733억 원 투자하여 지역 교육·연구·혁신 허브로 육성.', '<strong>유보통합 본격 추진:</strong> 유치원·어린이집 관리 체계를 교육부로 일원화하고, 4~5세 유아 학부모 부담 경감(4,703억 원) 및 0~2세 영아반 교사 대 아동 비율 개선(3,262억 원) 추진.', '<strong>AI 및 이공계 인재 양성:</strong> AI 디지털교과서 도입, 이공계 학생 연구 장려금 지원, 과학영재학교 및 과학고 지원 확대.']
+            },
+            {
+                id: 'msit', ministry: '과학기술정보통신부',
+                totalBudget: '23조 7,000억 원',
+                usageField: 'AI G3 도약 및 AX 지원, NEXT 전략기술 확보, 튼튼한 R&D 생태계 조성',
+                usageBudget: ['AI 대전환(AX): 4조 4,600억 원', 'NEXT 전략기술: 5조 9,300억 원', 'R&D 예산: 11조 8,000억 원'],
+                coreContent: ['AI 인프라 확충 및 기술 확보', '기초연구 생태계 복원', '차세대 기술 육성'],
+                coreDetail: ['<strong>AI 인프라 확충 및 기술 확보:</strong> 첨단 GPU 1만 5,000장 추가 확보 및 국가 AI 컴퓨팅센터 구축. AI 반도체, 피지컬 AI 등 차세대 기술 개발에 주력.', '<strong>기초연구 생태계 복원:</strong> 기초연구 과제 수를 R&D 삭감 이전 수준을 넘어선 1만 5천 개로 회복.', '<strong>차세대 기술 육성:</strong> 6G, 양자, 우주 등 미래 전략 기술에 대한 투자 강화.']
+            },
+            {
+                id: 'mofa', ministry: '외교부',
+                totalBudget: '3조 6,028억 원',
+                usageField: '실용외교 강화, 공적개발원조(ODA), 재외국민보호',
+                usageBudget: ['공적개발원조(ODA): 2조 1,852억 원', '북미 전략적 협력 강화: 75억 원'],
+                coreContent: ['ODA 예산 조정', '전략 외교 강화'],
+                coreDetail: ['<strong>ODA 예산 조정:</strong> 팬데믹, 우크라이나 전쟁 등으로 확대되었던 인도적 지원 수요를 재평가하여 5년 만에 감액.', '<strong>전략 외교 강화:</strong> 한미동맹 강화, 미국 및 중국과의 경제 현안 대응, 재외국민 보호 및 영사 서비스 강화를 위한 예산은 증액.']
+            },
+            {
+                id: 'mou', ministry: '통일부',
+                totalBudget: '1조 2,378억 원',
+                usageField: '남북교류협력 기반 조성, 북한이탈주민 지원, 인도적 문제 해결',
+                usageBudget: ['남북협력기금: 1조 25억 원', '북한인권 등 인도적 문제: 136억 원'],
+                coreContent: ['남북협력기금 대폭 증액', '북한인권 예산 조정'],
+                coreDetail: ['<strong>남북협력기금 대폭 증액:</strong> 향후 남북 대화 재개 및 교류 활성화에 대비한 재정 기반 확충을 위해 3년 만에 1조 원대로 증액.', '<strong>북한인권 예산 조정:</strong> 북한을 불필요하게 자극하지 않겠다는 기조하에 관련 예산 감액.']
+            },
+            {
+                id: 'moj', ministry: '법무부',
+                totalBudget: '정보 확인 중',
+                usageField: '범죄예방 및 사회안전, 교정·교화, 출입국·이민 정책',
+                usageBudget: ['정보 확인 중'],
+                coreContent: ['민생 침해 범죄 대응 강화', '수용자 교정·교화 내실화'],
+                coreDetail: ['<strong>민생 침해 범죄 대응 강화:</strong> 마약, 보이스피싱 등 범죄에 대한 대응 역량 강화 및 첨단 수사 장비 도입.', '<strong>수용자 교정·교화 내실화:</strong> 과밀 수용 해소 및 시설 개선, 소년범 재범 방지를 위한 맞춤형 교육 프로그램(\'만델라 소년학교\' 등) 확대.']
+            },
+            {
+                id: 'mnd', ministry: '국방부',
+                totalBudget: '정보 확인 중',
+                usageField: '첨단 무기 체계 확보, 초급간부 처우 개선',
+                usageBudget: ['첨단 무기 체계: 3조 2,000억 원'],
+                coreContent: ['첨단 국방력 강화', '초급간부 지원 확대'],
+                coreDetail: ['<strong>첨단 국방력 강화:</strong> 한국형 차세대 스텔스 전투기 연구 착수, F-35A 스텔스 전투기 추가 도입, K-방산 수출 지원 강화.', '<strong>초급간부 지원 확대:</strong> 5년 미만 초급간부의 보수를 최대 6.6% 인상하고 각종 수당 현실화, 간부 숙소 환경 개선.']
+            },
+            {
+                id: 'mois', ministry: '행정안전부',
+                totalBudget: '76조 4,426억 원',
+                usageField: 'AI 민주정부 구현, 국민 안전, 자치발전·균형성장',
+                usageBudget: ['국민안전: 2조 5,197억 원', '균형성장(지역사랑상품권 등): 2조 5,921억 원', 'AI 민주정부: 8,649억 원'],
+                coreContent: ['재난안전 대응 강화', '지역경제 활성화'],
+                coreDetail: ['<strong>재난안전 대응 강화:</strong> 재해위험지역 정비(1조 488억 원) 및 재난피해 복구 지원비(1조 100억 원)를 사상 처음으로 각각 1조 원 이상 편성.', '<strong>지역경제 활성화:</strong> 지역사랑상품권 국비 지원 규모를 1조 1,500억 원으로 확대하여 소상공인 매출 증대 및 지역 소비 촉진.']
+            },
+            {
+                id: 'mpva', ministry: '국가보훈부',
+                totalBudget: '6조 6,582억 원',
+                usageField: '보상금 및 수당 지급, 보훈의료, 예우 및 선양',
+                usageBudget: ['주요 보상금 5% 인상'],
+                coreContent: ['보훈 보상 및 예우 강화', '보훈 의료 격차 해소'],
+                coreDetail: ['<strong>보훈 보상 및 예우 강화:</strong> 생존 애국지사 특별예우금 2배 인상, 국가유공자 보상금 5% 인상, 참전유공자 사망 시 남겨진 배우자 생계지원금 신설.', '<strong>보훈 의료 격차 해소:</strong> 보훈병원이 없는 강원·제주에 \'준보훈병원\' 도입 및 위탁병원 확대.']
+            },
+            {
+                id: 'mcst', ministry: '문화체육관광부',
+                totalBudget: '9조 6,000억 원',
+                usageField: 'K-컬처 수출 및 경쟁력 강화, 국민 문화향유 기회 확대',
+                usageBudget: ['K-컬처 수출 및 경쟁력 강화: 1조 8,000억 원', '국민 문화향유: 7,000억 원'],
+                coreContent: ['콘텐츠 산업 육성', 'AI 기반 창작 지원', '청년문화패스 확대'],
+                coreDetail: ['<strong>콘텐츠 산업 육성:</strong> K-콘텐츠 펀드 출자 규모를 4,650억 원으로 확대하고, OTT 드라마·중예산 영화 제작 지원 확대.', '<strong>AI 기반 창작 지원:</strong> AI 특화 교육과정 신설(1,000명) 및 AI 기반 예술작품 제작 지원을 150편으로 대폭 확대.', '<strong>청년문화패스 확대:</strong> 지원 예산을 349억 원으로 두 배 이상 늘리고, 대상 연령과 사용처(영화 포함) 확대.']
+            },
+            {
+                id: 'mafra', ministry: '농림축산식품부',
+                totalBudget: '20조 350억 원',
+                usageField: '식량안보·유통구조 혁신, 국민 먹거리 돌봄, 농가 소득·경영 안정',
+                usageBudget: ['전략작물직불제: 4,196억 원', '농식품 바우처: 740억 원', '농어촌 기본소득 시범사업: 1,703억 원'],
+                coreContent: ['먹거리 복지 강화', '농촌 기본소득 도입', '식량안보 강화'],
+                coreDetail: ['<strong>먹거리 복지 강화:</strong> 농식품 바우처 지원 대상을 청년까지 확대하고, \'직장인 든든한 한 끼\' 사업(79억 원) 신설, 초등학생 과일간식 지원 재개(169억 원).', '<strong>농촌 기본소득 도입:</strong> 인구감소 지역 6개 군 주민에게 월 15만 원을 지역사랑상품권으로 지급하는 시범 사업 추진.', '<strong>식량안보 강화:</strong> 전략작물직불제 지원 면적과 품목을 확대하고, 쌀 자조금을 신규 도입.']
+            },
+            {
+                id: 'motie', ministry: '산업통상자원부',
+                totalBudget: '13조 8,778억 원',
+                usageField: '산업 전반의 AX 확산, 첨단 및 주력산업 육성, 재생에너지 중심 에너지 대전환',
+                usageBudget: ['산업 AX 확산: 1조 1,347억 원', '첨단 및 주력산업 육성: 1조 6,458억 원'],
+                coreContent: ['AI 팩토리 선도 프로젝트', '피지컬 AI 개발', '재생에너지 보급 확대'],
+                coreDetail: ['<strong>AI 팩토리 선도 프로젝트:</strong> 2,200억 원을 투입해 2030년까지 자율제조 AI 팩토리 500개 이상 구축.', '<strong>피지컬 AI 개발:</strong> 휴머노이드 로봇 등 미래 산업을 주도할 기술 개발에 4,022억 원을 투자.', '<strong>재생에너지 보급 확대:</strong> 신재생에너지 금융지원 사업을 6,480억 원으로 확대하고, 에너지 고속도로 등 전력 인프라 확충.']
+            },
+            {
+                id: 'mohw', ministry: '보건복지부',
+                totalBudget: '137조 6,480억 원',
+                usageField: '안전망 강화, 저출산·고령화 대응, 지역·필수·공공의료 확충',
+                usageBudget: ['보건의료 분야: 4조 6,707억 원', '지역·필수·공공의료: 8,108억 원'],
+                coreContent: ['기초생활보장 강화', '저출생 대응', '필수의료 확충'],
+                coreDetail: ['<strong>기초생활보장 강화:</strong> 기준 중위소득을 역대 최고 수준인 6.51% 인상.', '<strong>저출생 대응:</strong> 아동수당 지급 연령을 만 9세 미만으로 상향.', '<strong>필수의료 확충:</strong> 권역·지역 심뇌혈관질환센터 확충, 응급의료기관 융자 신설(1,000억 원), 달빛어린이병원 확대(93→120개소).']
+            },
+            {
+                id: 'me', ministry: '환경부',
+                totalBudget: '15조 9,160억 원',
+                usageField: '탈탄소 정책, 사회 안전망 조성, 기후대응 기술개발',
+                usageBudget: ['환경 R&D: 4,180억 원', '기후대응 기술개발: 537억 원'],
+                coreContent: ['무공해차 전환 가속화', '재생에너지 활성화'],
+                coreDetail: ['<strong>무공해차 전환 가속화:</strong> 전기차 구매보조금 단가를 유지하고, 내연차 전환지원금 및 전기차 안심보험 신설.', '<strong>재생에너지 활성화:</strong> 공기열 히트펌프 기반 난방 전기화 사업 신설 및 녹색 금융 투자 8.6조 원으로 확대.']
+            },
+            {
+                id: 'moel', ministry: '고용노동부',
+                totalBudget: '37조 6,157억 원',
+                usageField: '일하는 사람의 생명·안전 보호, 고용안전망 강화, 직업훈련',
+                usageBudget: ['고용안전망 강화(구직급여 등): 12조 5,910억 원', '직업훈련: 2조 5,000억 원'],
+                coreContent: ['산재 예방 강화', '고용보험 확대', 'AI 기반 직업훈련'],
+                coreDetail: ['<strong>산재 예방 강화:</strong> 50인 미만 사업장 대상 안전보건 컨설팅, 시설 개선 등 지원 확대.', '<strong>고용보험 확대:</strong> 예술인·노무제공자 사회보험료 지원 대상 85만 명으로 확대.', '<strong>AI 기반 직업훈련:</strong> K-디지털 트레이닝을 11만 명으로 확대하고, 폴리텍에 AX학과 20개 신설.']
+            },
+            {
+                id: 'mogef', ministry: '여성가족부',
+                totalBudget: '1조 9,866억 원',
+                usageField: '아이돌봄 및 가족 지원, 청소년 지원, 여성폭력 방지 및 피해자 보호',
+                usageBudget: ['가족 정책 분야: 1조 4,019억 원'],
+                coreContent: ['아이돌봄 서비스 확대', '한부모가족 지원 강화', '여성 안전망 강화'],
+                coreDetail: ['<strong>아이돌봄 서비스 확대:</strong> 정부 지원 기준을 중위소득 200%에서 250% 이하 가구로 대폭 완화.', '<strong>한부모가족 지원 강화:</strong> 복지급여 소득 기준을 완화하고, 생활보조금 등을 인상.', '<strong>여성 안전망 강화:</strong> 디지털성범죄피해자지원센터 인력 증원, 스토킹·교제폭력 피해자 보호 강화.']
+            },
+            {
+                id: 'molit', ministry: '국토교통부',
+                totalBudget: '62조 5,000억 원',
+                usageField: '국민 안전 강화, 건설경기 회복, 민생 안정, 균형 발전',
+                usageBudget: ['SOC 분야: 20조 9,000억 원', '간선교통망 확충: 8조 5,000억 원', '공적주택 공급: 22조 8,000억 원'],
+                coreContent: ['교통망 안전 투자 확대', '건설경기 회복', '주거 안정'],
+                coreDetail: ['<strong>교통망 안전 투자 확대:</strong> 도로 안전(2.5조 원), 철도 노후시설 개선(2.9조 원), 항공 안전(1,204억 원) 등에 집중 투자.', '<strong>건설경기 회복:</strong> GTX(4,361억 원), 신공항(8개소), 신규 도로(21건) 등 핵심 간선망 건설 추진.', '<strong>주거 안정:</strong> 공적주택 19만 4,000호 공급, 청년 월세지원 상시 전환, K-패스 예산 증액.']
+            },
+            {
+                id: 'mof', ministry: '해양수산부',
+                totalBudget: '7조 3,287억 원',
+                usageField: '북극항로 시대 주도, 수산업·어촌 경쟁력 강화, 해양산업 육성',
+                usageBudget: ['북극항로 기반 조성: 5,499억 원', '항만 인프라 확충: 1조 6,649억 원'],
+                coreContent: ['북극항로 개척', '기후위기 대응', '해수부 부산 이전 지원'],
+                coreDetail: ['<strong>북극항로 개척:</strong> 극지항해 선박 건조 지원(110억 원), 차세대 쇄빙연구선 건조(611억 원) 등 추진.', '<strong>기후위기 대응:</strong> 고수온 피해 예방을 위한 양식 품종 전환 지원(32억 원) 및 재난지원금 확대(250→493억 원).', '<strong>해수부 부산 이전 지원:</strong> 임시 청사 임차료, 직원 정주여건 지원 등에 322억 원 편성.']
+            },
+            {
+                id: 'mss', ministry: '중소벤처기업부',
+                totalBudget: '16조 8,449억 원',
+                usageField: '벤처 4대 강국 도약, 중소·소상공인 AX 전환, 소상공인 위기극복',
+                usageBudget: ['벤처 생태계 구축 (모태펀드 등): 3조 2,000억 원', '소상공인 지원: 4조 5,000억 원'],
+                coreContent: ['혁신 벤처 육성', '소상공인 경영안정'],
+                coreDetail: ['<strong>혁신 벤처 육성:</strong> 모태펀드 출자 규모를 1조 5,000억 원으로 확대하고, 딥테크 등 초격차 스타트업 1000+ 프로젝트 지원 강화.', '<strong>소상공인 경영안정:</strong> 전기요금 특별지원 대상을 131만 명으로 확대하고, 자영업자 고용보험료 지원 대상 확대.']
+            }
+        ];
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const tabsList = document.getElementById('tabs-list');
+            const contentContainer = document.getElementById('content-container');
+            
+            // Function to generate list HTML from an array
+            const createList = (items) => {
+                if (!Array.isArray(items) || items.length === 0) return '<p>내용 없음</p>';
+                if (items.length === 1 && !items[0].includes('<strong>')) return `<p>${items[0]}</p>`;
+                return `<ul>${items.map(item => `<li>${item}</li>`).join('')}</ul>`;
+            };
+
+            budgetData.forEach((data, index) => {
+                const tabItem = document.createElement('li');
+                tabItem.className = 'tab-item';
+                if (index === 0) tabItem.classList.add('active');
+                tabItem.dataset.target = `#content-${data.id}`;
+                tabItem.textContent = data.ministry;
+                tabsList.appendChild(tabItem);
+
+                const contentPanel = document.createElement('div');
+                contentPanel.className = 'content-panel';
+                if (index === 0) contentPanel.classList.add('active');
+                contentPanel.id = `content-${data.id}`;
+                
+                contentPanel.innerHTML = `
+                    <h2>${data.ministry}</h2>
+                    <div class="detail-grid">
+                        <div class="detail-item">
+                            <h4>2026년 총 예산안</h4>
+                            <p>${data.totalBudget}</p>
+                        </div>
+                        <div class="detail-item">
+                            <h4>주요 사용처 및 분야</h4>
+                            <p>${data.usageField}</p>
+                        </div>
+                        <div class="detail-item full-width">
+                            <h4>주요 사용처 및 분야별 예산안</h4>
+                            ${createList(data.usageBudget)}
+                        </div>
+                        <div class="detail-item full-width">
+                            <h4>주요(핵심) 내용</h4>
+                            ${createList(data.coreContent)}
+                        </div>
+                        <div class="detail-item full-width">
+                            <h4>주요(핵심) 내용 별 세부 내용</h4>
+                            ${createList(data.coreDetail)}
+                        </div>
+                    </div>
+                `;
+                contentContainer.appendChild(contentPanel);
+            });
+
+            const tabs = document.querySelectorAll('.tab-item');
+            const contentPanels = document.querySelectorAll('.content-panel');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(t => t.classList.remove('active'));
+                    contentPanels.forEach(p => p.classList.remove('active'));
+                    tab.classList.add('active');
+                    document.querySelector(tab.dataset.target).classList.add('active');
+                });
+            });
+
+            const tabsWrapper = document.getElementById('tabs-wrapper');
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const SCROLL_AMOUNT = 300;
+
+            prevBtn.addEventListener('click', () => { tabsWrapper.scrollLeft -= SCROLL_AMOUNT; });
+            nextBtn.addEventListener('click', () => { tabsWrapper.scrollLeft += SCROLL_AMOUNT; });
+
+            const handleScrollButtons = () => {
+                const maxScrollLeft = tabsWrapper.scrollWidth - tabsWrapper.clientWidth;
+                // Add a small tolerance (1px) for floating point inaccuracies
+                prevBtn.style.display = tabsWrapper.scrollLeft > 0 ? 'flex' : 'none';
+                nextBtn.style.display = tabsWrapper.scrollLeft < maxScrollLeft - 1 ? 'flex' : 'none';
+            };
+            
+            tabsWrapper.addEventListener('scroll', handleScrollButtons);
+            window.addEventListener('resize', handleScrollButtons);
+            
+            // Initial check after a short delay to ensure layout is complete
+            setTimeout(handleScrollButtons, 100);
+        });
+    </script>
+</body>
+</html>
